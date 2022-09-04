@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-08-25T02:20:12.722954+00:00",
+  "timestamp": "2022-09-04T02:19:14.773578+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -7764,6 +7764,38 @@
       "body": "https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-opaque-09 and https://github.com/cfrg/draft-irtf-cfrg-opaque/blob/master/draft-irtf-cfrg-opaque.md both refer to `Ne`, but this value is not defined anywhere.\r\n\r\nTwo occurrences I found are the definition of `masked_response` [here](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-opaque-09#section-6.3.1), and `credential_response_pad` [here](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-opaque-09#section-6.3.2.2). There may be others.",
       "createdAt": "2022-08-23T17:21:52Z",
       "updatedAt": "2022-08-23T17:21:52Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 370,
+      "id": "I_kwDOD79ejs5RGtn_",
+      "title": "OPAQUE-3DH config and example are inconsistent",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/issues/370",
+      "state": "OPEN",
+      "author": "stef",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "in https://github.com/cfrg/draft-irtf-cfrg-opaque/blob/master/draft-irtf-cfrg-opaque.md#configurations-configurations\r\nsays the following:\r\n> An OPAQUE-3DH configuration is a tuple (OPRF, KDF, MAC, Hash, KSF, Group, Context) ....\r\n\r\nand then a few lines below that this:\r\n\r\n> Absent an application-specific profile, the following configurations are RECOMMENDED:\r\n\r\n>    OPRF(ristretto255, SHA-512), HKDF-SHA-512, HMAC-SHA-512, SHA-512, Scrypt(32768,8,1), internal, ristretto255\r\n>    OPRF(P-256, SHA-256), HKDF-SHA-256, HMAC-SHA-256, SHA-256, Scrypt(32768,8,1), internal, P-256\r\n\r\nthe next to last tuple member `internal` is inconsistent with the first quoted line, instead the group should be listed here. and i'm not quite sure if it is correct for the context, for me this is confusing, what is this `internal` and how this relates - if at all - to the context.",
+      "createdAt": "2022-09-03T01:11:27Z",
+      "updatedAt": "2022-09-03T01:11:27Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 371,
+      "id": "I_kwDOD79ejs5RHyGJ",
+      "title": "why keyshare why not ephemeral key pairs?",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/issues/371",
+      "state": "OPEN",
+      "author": "stef",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "I'm confused by the term keyshare, this term doesn't tell me anything, and i think it obscures the nature of this value, the keyshare is nothing but an ephemeral key pair, and if we would call it that i think understanding would be easier.\r\n\r\nmaybe you use keyshare because it's a more generic term that applies to other opaque instantiations, but the current spec focuses on 3dh where the keyshare is really an ephemeral  keypair, please lets call it that.",
+      "createdAt": "2022-09-04T00:27:59Z",
+      "updatedAt": "2022-09-04T00:27:59Z",
       "closedAt": null,
       "comments": []
     }
