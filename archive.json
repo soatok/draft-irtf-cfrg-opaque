@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-09-04T02:19:14.773578+00:00",
+  "timestamp": "2022-09-13T02:26:58.705265+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -7779,9 +7779,24 @@
       "labels": [],
       "body": "in https://github.com/cfrg/draft-irtf-cfrg-opaque/blob/master/draft-irtf-cfrg-opaque.md#configurations-configurations\r\nsays the following:\r\n> An OPAQUE-3DH configuration is a tuple (OPRF, KDF, MAC, Hash, KSF, Group, Context) ....\r\n\r\nand then a few lines below that this:\r\n\r\n> Absent an application-specific profile, the following configurations are RECOMMENDED:\r\n\r\n>    OPRF(ristretto255, SHA-512), HKDF-SHA-512, HMAC-SHA-512, SHA-512, Scrypt(32768,8,1), internal, ristretto255\r\n>    OPRF(P-256, SHA-256), HKDF-SHA-256, HMAC-SHA-256, SHA-256, Scrypt(32768,8,1), internal, P-256\r\n\r\nthe next to last tuple member `internal` is inconsistent with the first quoted line, instead the group should be listed here. and i'm not quite sure if it is correct for the context, for me this is confusing, what is this `internal` and how this relates - if at all - to the context.",
       "createdAt": "2022-09-03T01:11:27Z",
-      "updatedAt": "2022-09-03T01:11:27Z",
+      "updatedAt": "2022-09-12T05:33:16Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sorry for the confusion. I believe this \"internal\" string should be omitted. It was introduced in https://github.com/cfrg/draft-irtf-cfrg-opaque/commit/950f2f0586dd03a2b3ffab11008c21a4d0d3f12b back when there was an \"external\" and \"internal\" mode for the envelope configuration portion of the protocol. Now that we no longer have those, we should have removed this internal configuration reference, but failed to.",
+          "createdAt": "2022-09-12T01:01:20Z",
+          "updatedAt": "2022-09-12T01:01:20Z"
+        },
+        {
+          "author": "bytemare",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Indeed! Good catch \ud83d\udc4d",
+          "createdAt": "2022-09-12T05:33:16Z",
+          "updatedAt": "2022-09-12T05:33:16Z"
+        }
+      ]
     },
     {
       "number": 371,
@@ -7795,9 +7810,31 @@
       "labels": [],
       "body": "I'm confused by the term keyshare, this term doesn't tell me anything, and i think it obscures the nature of this value, the keyshare is nothing but an ephemeral key pair, and if we would call it that i think understanding would be easier.\r\n\r\nmaybe you use keyshare because it's a more generic term that applies to other opaque instantiations, but the current spec focuses on 3dh where the keyshare is really an ephemeral  keypair, please lets call it that.",
       "createdAt": "2022-09-04T00:27:59Z",
-      "updatedAt": "2022-09-04T00:27:59Z",
+      "updatedAt": "2022-09-12T21:11:51Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hi @stef, thanks for the feedback. Can you clarify what exactly would be the proposed change here? I believe we use keyshare to refer to one half of the keypair, not the keypair itself. (keyshare = public component, private_keyshare = private component).\r\n\r\nAt the moment, there are the following four variables that have \"keyshare\" in their name:\r\n- `server_keyshare`\r\n- `client_keyshare`\r\n- `server_private_keyshare`\r\n- `client_private_keyshare`\r\n\r\nAre you suggesting that we alter these variable names? And if so, do you have a proposal for what these variables should be renamed to?\r\n\r\nThe terminology \"key share\" only appears as prose in the text in 3 locations (unless I missed some):\r\n1) In the definition of client_keyshare: \"A serialized client ephemeral key share of fixed size `Npk`.\"\r\n2) In the definition of server_keyshare: \"Server ephemeral key share of fixed size `Npk`, where `Npk`\r\ndepends on the corresponding prime order group.\"\r\n3) In the last paragraph of the \"SIGMA-I instantiation sketch\" section: \"[...] would use only the ephemeral key shares exchanged between client and server\"\r\n\r\nAre you proposing that we just replace \"ephemeral key share\" here with \"ephemeral public key\"?\r\n\r\nThanks in advance for any clarifications!",
+          "createdAt": "2022-09-12T01:26:35Z",
+          "updatedAt": "2022-09-12T01:26:35Z"
+        },
+        {
+          "author": "bytemare",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The term _keyshare_ or _key share_ is a common term in Diffie-Hellman-protocol-like literature to designate the participants' key material that they share with each other.",
+          "createdAt": "2022-09-12T05:48:49Z",
+          "updatedAt": "2022-09-12T05:48:49Z"
+        },
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> Are you proposing that we just replace \"ephemeral key share\" here with \"ephemeral public key\"?\r\n\r\nthis! please! :)",
+          "createdAt": "2022-09-12T21:11:50Z",
+          "updatedAt": "2022-09-12T21:11:50Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -28587,6 +28624,112 @@
           "updatedAt": "2022-07-01T19:16:16Z"
         }
       ],
+      "reviews": []
+    },
+    {
+      "number": 372,
+      "id": "PR_kwDOD79ejs4-vhop",
+      "title": "Removing references to Ne parameter",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/372",
+      "state": "OPEN",
+      "author": "kevinlewi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #369.\r\n\r\nReplaces instances of `Ne` with `Nn + Nm`. Thanks for the catch @crockeea!",
+      "createdAt": "2022-09-12T00:52:16Z",
+      "updatedAt": "2022-09-12T05:31:35Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
+      "baseRefName": "master",
+      "baseRefOid": "4c36aa9eede4f12c3d0cdbce196e9256af930671",
+      "headRepository": "kevinlewi/draft-irtf-cfrg-opaque",
+      "headRefName": "fix_ne",
+      "headRefOid": "879b8a740ad05b2b6ed096f88b524cc8f0157c5b",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOD79ejs5Bxg6A",
+          "commit": {
+            "abbreviatedOid": "879b8a7"
+          },
+          "author": "bytemare",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-09-12T05:31:35Z",
+          "updatedAt": "2022-09-12T05:31:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 373,
+      "id": "PR_kwDOD79ejs4-vi1K",
+      "title": "Removing reference to internal mode in configuration strings",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/373",
+      "state": "OPEN",
+      "author": "kevinlewi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #370.\r\n\r\nccing @stef for pointing out the change and @bytemare as an FYI for the original PR that introduced the string\r\n\r\nAs stated in the issue, I believe this \"internal\" string should be omitted. It was introduced in https://github.com/cfrg/draft-irtf-cfrg-opaque/commit/950f2f0586dd03a2b3ffab11008c21a4d0d3f12b back when there was an \"external\" and \"internal\" mode for the envelope configuration portion of the protocol. Now that we no longer have those, we should have removed this internal configuration reference, but failed to.\r\n\r\n",
+      "createdAt": "2022-09-12T01:03:11Z",
+      "updatedAt": "2022-09-12T05:33:44Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
+      "baseRefName": "master",
+      "baseRefOid": "4c36aa9eede4f12c3d0cdbce196e9256af930671",
+      "headRepository": "kevinlewi/draft-irtf-cfrg-opaque",
+      "headRefName": "fix_internal_mode",
+      "headRefOid": "70691d29693781149f07758931d42e212080b6ca",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOD79ejs5BxhNP",
+          "commit": {
+            "abbreviatedOid": "70691d2"
+          },
+          "author": "bytemare",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-09-12T05:33:44Z",
+          "updatedAt": "2022-09-12T05:33:44Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 374,
+      "id": "PR_kwDOD79ejs4-0tqw",
+      "title": "Rename \"ephemeral key share\" to \"ephemeral public key\"",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/374",
+      "state": "OPEN",
+      "author": "kevinlewi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes #371.\r\n\r\nSee the discussion in #371 for more context. Note that this only changes the prose describing the variable names, and not the variable names themselves.\r\n\r\ncc'ing @stef for feedback",
+      "createdAt": "2022-09-12T23:39:21Z",
+      "updatedAt": "2022-09-12T23:39:47Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
+      "baseRefName": "master",
+      "baseRefOid": "4c36aa9eede4f12c3d0cdbce196e9256af930671",
+      "headRepository": "kevinlewi/draft-irtf-cfrg-opaque",
+      "headRefName": "rename_keyshare",
+      "headRefOid": "8c5d508b50c3ea3e3fb88a10c3a6685707ccbe31",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
       "reviews": []
     }
   ]
