@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-09-13T02:26:58.705265+00:00",
+  "timestamp": "2022-09-15T02:32:46.074873+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -28718,7 +28718,7 @@
       "labels": [],
       "body": "Closes #371.\r\n\r\nSee the discussion in #371 for more context. Note that this only changes the prose describing the variable names, and not the variable names themselves.\r\n\r\ncc'ing @stef for feedback",
       "createdAt": "2022-09-12T23:39:21Z",
-      "updatedAt": "2022-09-12T23:39:47Z",
+      "updatedAt": "2022-09-14T10:46:08Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
       "baseRefName": "master",
       "baseRefOid": "4c36aa9eede4f12c3d0cdbce196e9256af930671",
@@ -28729,8 +28729,65 @@
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
-      "comments": [],
-      "reviews": []
+      "comments": [
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "great thanks! only nit, for me it's the variable names also that are confusing. everytime i look at the testvectors, most of the variables are obvious, but the keyshare vars are always confusing me. would it be a big thing to also rename them?",
+          "createdAt": "2022-09-13T15:05:48Z",
+          "updatedAt": "2022-09-13T15:05:48Z"
+        },
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@stef: Personally, I'm reluctant to do the variable renaming because I think it is too big of a change at this point. But perhaps if others chime in with an opinion on whether or not it's worth the variable renaming, we could consider it? @bytemare @chris-wood ",
+          "createdAt": "2022-09-14T04:55:57Z",
+          "updatedAt": "2022-09-14T04:55:57Z"
+        },
+        {
+          "author": "bytemare",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'm not against, for consistency I think it's better to also rename the vectors.\n(New implementors or readers might get a bit confused)",
+          "createdAt": "2022-09-14T04:59:46Z",
+          "updatedAt": "2022-09-14T04:59:46Z"
+        },
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Here are the four variables we would need to rename:\r\n- `server_keyshare`\r\n- `client_keyshare`\r\n- `server_private_keyshare`\r\n- `client_private_keyshare`\r\n\r\nFor context, these names were originally decided on in https://github.com/cfrg/draft-irtf-cfrg-opaque/commit/87c3287dc789eda67dcb93fbd481334025c71cc6 , where their previous names were:\r\n- `epkS`, `epkU`, `eskS`, `eskU`\r\n\r\nAny proposals for what each of these should be renamed to? Some options that come to mind:\r\n1) `client_e_pk`, `client_e_sk`, `server_e_pk`, `server_e_sk`\r\n2) `client_ephemeral_public_key`, `client_ephemeral_private_key`, `server_ephemeral_public_key`, `server_ephemeral_private_key`",
+          "createdAt": "2022-09-14T05:18:37Z",
+          "updatedAt": "2022-09-14T05:18:37Z"
+        },
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> I think it is too big of a change at this point. \r\n\r\nwhy do you think so? for existing implementations nothing changes. it helps clarity.\r\n\r\nboth of your proposals are good, but since this is a spec, clarity and expressiveness should trump brevity so i would prefer the 2nd. but i also have to admit that in my code i still use the names from 87c3287 - which i think despite their cryptic shortness are still more expressive than keyshare.",
+          "createdAt": "2022-09-14T10:44:44Z",
+          "updatedAt": "2022-09-14T10:44:44Z"
+        },
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "oh i see the sage ref impl needs to be changed i guess?",
+          "createdAt": "2022-09-14T10:46:07Z",
+          "updatedAt": "2022-09-14T10:46:07Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOD79ejs5B3q6m",
+          "commit": {
+            "abbreviatedOid": "8c5d508"
+          },
+          "author": "bytemare",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-09-13T04:38:36Z",
+          "updatedAt": "2022-09-13T04:38:36Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
