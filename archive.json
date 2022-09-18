@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-09-15T02:32:46.074873+00:00",
+  "timestamp": "2022-09-18T02:37:30.091367+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -28718,7 +28718,7 @@
       "labels": [],
       "body": "Closes #371.\r\n\r\nSee the discussion in #371 for more context. Note that this only changes the prose describing the variable names, and not the variable names themselves.\r\n\r\ncc'ing @stef for feedback",
       "createdAt": "2022-09-12T23:39:21Z",
-      "updatedAt": "2022-09-14T10:46:08Z",
+      "updatedAt": "2022-09-15T10:17:23Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
       "baseRefName": "master",
       "baseRefOid": "4c36aa9eede4f12c3d0cdbce196e9256af930671",
@@ -28771,6 +28771,20 @@
           "body": "oh i see the sage ref impl needs to be changed i guess?",
           "createdAt": "2022-09-14T10:46:07Z",
           "updatedAt": "2022-09-14T10:46:07Z"
+        },
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Yes, the implementation itself (the code which produces the test vectors) would also need to be adjusted accordingly. I'd like to wait and see until we have others chime in with thoughts on this here before making the change. IMO although the name keyshare may not be 100% illustrative as a variable name, it doesn't seem to significantly detract from a reader understanding the protocol (given that we also define the variable as being the ephemeral public/private key already).",
+          "createdAt": "2022-09-15T08:51:57Z",
+          "updatedAt": "2022-09-15T08:51:57Z"
+        },
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> IMO although the name keyshare may not be 100% illustrative as a variable name, it doesn't seem to significantly detract from a reader understanding the protocol (given that we also define the variable as being the ephemeral public/private key already).\r\n\r\ntrue, it only confuses when working with the test vectors.",
+          "createdAt": "2022-09-15T10:17:23Z",
+          "updatedAt": "2022-09-15T10:17:23Z"
         }
       ],
       "reviews": [
