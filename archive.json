@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-09-18T02:37:30.091367+00:00",
+  "timestamp": "2022-10-02T02:32:39.116340+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -7835,6 +7835,22 @@
           "updatedAt": "2022-09-12T21:11:50Z"
         }
       ]
+    },
+    {
+      "number": 375,
+      "id": "I_kwDOD79ejs5TAXKe",
+      "title": "Allow changing Preable construction & usage in OPAQUE-3DH",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/issues/375",
+      "state": "OPEN",
+      "author": "dequbed",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "As of [4c36aa9](https://github.com/cfrg/draft-irtf-cfrg-opaque/commit/4c36aa9eede4f12c3d0cdbce196e9256af930671), the Preamble used by OPAQUE-3DH is defined as:\r\n```\r\nconcat(\"RFCXXXX\",\r\n       I2OSP(len(context), 2), context,\r\n       I2OSP(len(client_identity), 2), client_identity,\r\n       ke1,\r\n       I2OSP(len(server_identity), 2), server_identity,\r\n       credential_response,\r\n       server_nonce,\r\n       server_keyshare)\r\n```\r\n\r\nI'm currently working on a [SASL mechanism specification](https://github.com/dequbed/draft-reitzenstein-auth-opaque) using OPAQUE, where it would be benefitial to be able to construct this transcript hash, that is the `preamble`, in a very different way.\r\n\r\nFor one, due to SASLprep and encoding limitates enforced by the wire format, `client_identity` has three different representations. The mechanism specification would need to be careful to make clear which one is used in every context and it would make implementation bugs much more likely, as the representations only differ with identities containing complex unicode or characters such as '=' and ','.\r\n\r\nSecondly, while the preamble does have a `context` field parts of the data I would like to include are only available after the server response, making constructing the preamble using a running hash function impossible.\r\n\r\nI think this is a reasonably simple change as making 'preamble' an (opaque) parameter to `AuthServerRespond` and `AuthClientFinalize` instead of constructing it inline would already allow me to refer to those functions as-is instead of having to redefine them using a different preamble construction.\r\n\r\nIf this change is something that is wanted I'm happy to write a pull request with updated text to this end.",
+      "createdAt": "2022-09-30T15:22:25Z",
+      "updatedAt": "2022-09-30T15:22:25Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
