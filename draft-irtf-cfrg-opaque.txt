@@ -5,12 +5,12 @@
 Network Working Group                                        D. Bourdrez
 Internet-Draft                                                          
 Intended status: Informational                               H. Krawczyk
-Expires: 6 January 2023                              Algorand Foundation
+Expires: 6 April 2023                                Algorand Foundation
                                                                  K. Lewi
                                                            Novi Research
                                                               C. A. Wood
                                                         Cloudflare, Inc.
-                                                             5 July 2022
+                                                          3 October 2022
 
 
                   The OPAQUE Asymmetric PAKE Protocol
@@ -49,7 +49,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 6 January 2023.
+   This Internet-Draft will expire on 6 April 2023.
 
 Copyright Notice
 
@@ -1148,7 +1148,7 @@ def ClientFinish(client_identity, server_identity, ke2):
    struct {
      uint8 evaluated_message[Noe];
      uint8 masking_nonce[Nn];
-     uint8 masked_response[Npk + Ne];
+     uint8 masked_response[Npk + Nn + Nm];
    } CredentialResponse;
 
    evaluated_message: A serialized OPRF group element.
@@ -1236,7 +1236,7 @@ def CreateCredentialResponse(request, server_public_key, record,
   masking_nonce = random(Nn)
   credential_response_pad = Expand(record.masking_key,
                                    concat(masking_nonce, "CredentialResponsePad"),
-                                   Npk + Ne)
+                                   Npk + Nn + Nm)
   masked_response = xor(credential_response_pad,
                         concat(server_public_key, record.envelope))
   Create CredentialResponse response with (evaluated_message, masking_nonce, masked_response)
@@ -1254,7 +1254,7 @@ def CreateCredentialResponse(request, server_public_key, record,
    *  record.masking_key is set to a random byte string of length Nh
 
    *  record.envelope is set to the byte string consisting only of zeros
-      of length Ne
+      of length Nn + Nm
 
    It is RECOMMENDED that a fake client record is created once (e.g. as
    the first user record of the application) and stored alongside
@@ -1300,7 +1300,7 @@ def RecoverCredentials(password, blind, response,
   masking_key = Expand(randomized_pwd, "MaskingKey", Nh)
   credential_response_pad = Expand(masking_key,
                                    concat(response.masking_nonce, "CredentialResponsePad"),
-                                   Npk + Ne)
+                                   Npk + Nn + Nm)
   concat(server_public_key, envelope) = xor(credential_response_pad,
                                               response.masked_response)
   (client_private_key, export_key) =
@@ -2177,19 +2177,19 @@ def AuthServerRespond(server_identity, server_private_key, client_identity,
 12.1.  Normative References
 
    [I-D.irtf-cfrg-voprf]
-              Davidson, A., Faz-Hernandez, A., Sullivan, N., and C. A.
+              Davidson, A., Faz-Hernández, A., Sullivan, N., and C. A.
               Wood, "Oblivious Pseudorandom Functions (OPRFs) using
               Prime-Order Groups", Work in Progress, Internet-Draft,
-              draft-irtf-cfrg-voprf-10, 30 June 2022,
+              draft-irtf-cfrg-voprf-13, 12 September 2022,
               <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
-              voprf-10>.
+              voprf-13>.
 
-   [OPRF]     Davidson, A., Faz-Hernandez, A., Sullivan, N., and C. A.
+   [OPRF]     Davidson, A., Faz-Hernández, A., Sullivan, N., and C. A.
               Wood, "Oblivious Pseudorandom Functions (OPRFs) using
               Prime-Order Groups", Work in Progress, Internet-Draft,
-              draft-irtf-cfrg-voprf-10, 30 June 2022,
+              draft-irtf-cfrg-voprf-13, 12 September 2022,
               <https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-
-              voprf-10>.
+              voprf-13>.
 
    [RFC2104]  Krawczyk, H., Bellare, M., and R. Canetti, "HMAC: Keyed-
               Hashing for Message Authentication", RFC 2104,
@@ -2255,7 +2255,7 @@ def AuthServerRespond(server_identity, server_private_key, client_identity,
               Hellman protocol", CRYPTO , 2005.
 
    [I-D.irtf-cfrg-hash-to-curve]
-              Faz-Hernandez, A., Scott, S., Sullivan, N., Wahby, R. S.,
+              Faz-Hernández, A., Scott, S., Sullivan, N., Wahby, R. S.,
               and C. A. Wood, "Hashing to Elliptic Curves", Work in
               Progress, Internet-Draft, draft-irtf-cfrg-hash-to-curve-
               16, 15 June 2022, <https://datatracker.ietf.org/doc/html/
