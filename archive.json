@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-02T02:32:39.116340+00:00",
+  "timestamp": "2022-10-04T02:10:32.442104+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -7756,15 +7756,15 @@
       "id": "I_kwDOD79ejs5QXTWL",
       "title": "`Ne` is undefined",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/issues/369",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "crockeea",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-opaque-09 and https://github.com/cfrg/draft-irtf-cfrg-opaque/blob/master/draft-irtf-cfrg-opaque.md both refer to `Ne`, but this value is not defined anywhere.\r\n\r\nTwo occurrences I found are the definition of `masked_response` [here](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-opaque-09#section-6.3.1), and `credential_response_pad` [here](https://datatracker.ietf.org/doc/html/draft-irtf-cfrg-opaque-09#section-6.3.2.2). There may be others.",
       "createdAt": "2022-08-23T17:21:52Z",
-      "updatedAt": "2022-08-23T17:21:52Z",
-      "closedAt": null,
+      "updatedAt": "2022-10-03T16:57:17Z",
+      "closedAt": "2022-10-03T16:57:17Z",
       "comments": []
     },
     {
@@ -7772,15 +7772,15 @@
       "id": "I_kwDOD79ejs5RGtn_",
       "title": "OPAQUE-3DH config and example are inconsistent",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/issues/370",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "stef",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "in https://github.com/cfrg/draft-irtf-cfrg-opaque/blob/master/draft-irtf-cfrg-opaque.md#configurations-configurations\r\nsays the following:\r\n> An OPAQUE-3DH configuration is a tuple (OPRF, KDF, MAC, Hash, KSF, Group, Context) ....\r\n\r\nand then a few lines below that this:\r\n\r\n> Absent an application-specific profile, the following configurations are RECOMMENDED:\r\n\r\n>    OPRF(ristretto255, SHA-512), HKDF-SHA-512, HMAC-SHA-512, SHA-512, Scrypt(32768,8,1), internal, ristretto255\r\n>    OPRF(P-256, SHA-256), HKDF-SHA-256, HMAC-SHA-256, SHA-256, Scrypt(32768,8,1), internal, P-256\r\n\r\nthe next to last tuple member `internal` is inconsistent with the first quoted line, instead the group should be listed here. and i'm not quite sure if it is correct for the context, for me this is confusing, what is this `internal` and how this relates - if at all - to the context.",
       "createdAt": "2022-09-03T01:11:27Z",
-      "updatedAt": "2022-09-12T05:33:16Z",
-      "closedAt": null,
+      "updatedAt": "2022-10-03T16:57:34Z",
+      "closedAt": "2022-10-03T16:57:34Z",
       "comments": [
         {
           "author": "kevinlewi",
@@ -7803,15 +7803,15 @@
       "id": "I_kwDOD79ejs5RHyGJ",
       "title": "why keyshare why not ephemeral key pairs?",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/issues/371",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "stef",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "I'm confused by the term keyshare, this term doesn't tell me anything, and i think it obscures the nature of this value, the keyshare is nothing but an ephemeral key pair, and if we would call it that i think understanding would be easier.\r\n\r\nmaybe you use keyshare because it's a more generic term that applies to other opaque instantiations, but the current spec focuses on 3dh where the keyshare is really an ephemeral  keypair, please lets call it that.",
       "createdAt": "2022-09-04T00:27:59Z",
-      "updatedAt": "2022-09-12T21:11:51Z",
-      "closedAt": null,
+      "updatedAt": "2022-10-03T17:03:59Z",
+      "closedAt": "2022-10-03T17:03:59Z",
       "comments": [
         {
           "author": "kevinlewi",
@@ -7848,9 +7848,24 @@
       "labels": [],
       "body": "As of [4c36aa9](https://github.com/cfrg/draft-irtf-cfrg-opaque/commit/4c36aa9eede4f12c3d0cdbce196e9256af930671), the Preamble used by OPAQUE-3DH is defined as:\r\n```\r\nconcat(\"RFCXXXX\",\r\n       I2OSP(len(context), 2), context,\r\n       I2OSP(len(client_identity), 2), client_identity,\r\n       ke1,\r\n       I2OSP(len(server_identity), 2), server_identity,\r\n       credential_response,\r\n       server_nonce,\r\n       server_keyshare)\r\n```\r\n\r\nI'm currently working on a [SASL mechanism specification](https://github.com/dequbed/draft-reitzenstein-auth-opaque) using OPAQUE, where it would be benefitial to be able to construct this transcript hash, that is the `preamble`, in a very different way.\r\n\r\nFor one, due to SASLprep and encoding limitates enforced by the wire format, `client_identity` has three different representations. The mechanism specification would need to be careful to make clear which one is used in every context and it would make implementation bugs much more likely, as the representations only differ with identities containing complex unicode or characters such as '=' and ','.\r\n\r\nSecondly, while the preamble does have a `context` field parts of the data I would like to include are only available after the server response, making constructing the preamble using a running hash function impossible.\r\n\r\nI think this is a reasonably simple change as making 'preamble' an (opaque) parameter to `AuthServerRespond` and `AuthClientFinalize` instead of constructing it inline would already allow me to refer to those functions as-is instead of having to redefine them using a different preamble construction.\r\n\r\nIf this change is something that is wanted I'm happy to write a pull request with updated text to this end.",
       "createdAt": "2022-09-30T15:22:25Z",
-      "updatedAt": "2022-09-30T15:22:25Z",
+      "updatedAt": "2022-10-02T15:59:46Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I don't think the preamble construction should be changed, as it is core to the security of the protocol and should be kept as required with this specific format. The preamble must incorporate its current parameters (client_identity, ke1, server_identity, ke2), as leaving any of them out would not be a good idea.\r\n\r\nPerhaps the way the elements are concatenated together could be adjusted without affecting security, but I don't think that that is what you are suggesting...",
+          "createdAt": "2022-10-02T04:56:54Z",
+          "updatedAt": "2022-10-02T04:56:54Z"
+        },
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "may i ask why this is necessary? my guess would be that this is for channel binding? if so i don't think channel binding is a useful thing in the context of opaque, since each session is unique and thus implicitly channel-bound. channel binding only makes sense for auth protocols where the authentication token (hashed? password) is static and thus can be replayed/reused easily in other connections.",
+          "createdAt": "2022-10-02T15:59:46Z",
+          "updatedAt": "2022-10-02T15:59:46Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -28647,24 +28662,26 @@
       "id": "PR_kwDOD79ejs4-vhop",
       "title": "Removing references to Ne parameter",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/372",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kevinlewi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #369.\r\n\r\nReplaces instances of `Ne` with `Nn + Nm`. Thanks for the catch @crockeea!",
       "createdAt": "2022-09-12T00:52:16Z",
-      "updatedAt": "2022-09-12T05:31:35Z",
+      "updatedAt": "2022-10-03T16:57:16Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
       "baseRefName": "master",
       "baseRefOid": "4c36aa9eede4f12c3d0cdbce196e9256af930671",
       "headRepository": "kevinlewi/draft-irtf-cfrg-opaque",
       "headRefName": "fix_ne",
       "headRefOid": "879b8a740ad05b2b6ed096f88b524cc8f0157c5b",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-10-03T16:57:16Z",
+      "mergedAt": "2022-10-03T16:57:16Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "ceeb4e7bdde479995b62d3a4a918595dd9584948"
+      },
       "comments": [],
       "reviews": [
         {
@@ -28687,24 +28704,26 @@
       "id": "PR_kwDOD79ejs4-vi1K",
       "title": "Removing reference to internal mode in configuration strings",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/373",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kevinlewi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #370.\r\n\r\nccing @stef for pointing out the change and @bytemare as an FYI for the original PR that introduced the string\r\n\r\nAs stated in the issue, I believe this \"internal\" string should be omitted. It was introduced in https://github.com/cfrg/draft-irtf-cfrg-opaque/commit/950f2f0586dd03a2b3ffab11008c21a4d0d3f12b back when there was an \"external\" and \"internal\" mode for the envelope configuration portion of the protocol. Now that we no longer have those, we should have removed this internal configuration reference, but failed to.\r\n\r\n",
       "createdAt": "2022-09-12T01:03:11Z",
-      "updatedAt": "2022-09-12T05:33:44Z",
+      "updatedAt": "2022-10-03T16:57:33Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
       "baseRefName": "master",
       "baseRefOid": "4c36aa9eede4f12c3d0cdbce196e9256af930671",
       "headRepository": "kevinlewi/draft-irtf-cfrg-opaque",
       "headRefName": "fix_internal_mode",
       "headRefOid": "70691d29693781149f07758931d42e212080b6ca",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-10-03T16:57:33Z",
+      "mergedAt": "2022-10-03T16:57:33Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "798978f93134c15e4850fced13db13d6ed347c76"
+      },
       "comments": [],
       "reviews": [
         {
@@ -28719,6 +28738,19 @@
           "createdAt": "2022-09-12T05:33:44Z",
           "updatedAt": "2022-09-12T05:33:44Z",
           "comments": []
+        },
+        {
+          "id": "PRR_kwDOD79ejs5DRwPf",
+          "commit": {
+            "abbreviatedOid": "70691d2"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-03T16:57:29Z",
+          "updatedAt": "2022-10-03T16:57:29Z",
+          "comments": []
         }
       ]
     },
@@ -28727,24 +28759,26 @@
       "id": "PR_kwDOD79ejs4-0tqw",
       "title": "Rename \"ephemeral key share\" to \"ephemeral public key\"",
       "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/374",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "kevinlewi",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes #371.\r\n\r\nSee the discussion in #371 for more context. Note that this only changes the prose describing the variable names, and not the variable names themselves.\r\n\r\ncc'ing @stef for feedback",
       "createdAt": "2022-09-12T23:39:21Z",
-      "updatedAt": "2022-09-15T10:17:23Z",
+      "updatedAt": "2022-10-03T17:03:59Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
       "baseRefName": "master",
       "baseRefOid": "4c36aa9eede4f12c3d0cdbce196e9256af930671",
       "headRepository": "kevinlewi/draft-irtf-cfrg-opaque",
       "headRefName": "rename_keyshare",
       "headRefOid": "8c5d508b50c3ea3e3fb88a10c3a6685707ccbe31",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2022-10-03T17:03:58Z",
+      "mergedAt": "2022-10-03T17:03:58Z",
+      "mergedBy": "chris-wood",
+      "mergeCommit": {
+        "oid": "f6f458234d546b6f10fd43f5cb7b3ece75be33e1"
+      },
       "comments": [
         {
           "author": "stef",
@@ -28815,6 +28849,19 @@
           "body": "",
           "createdAt": "2022-09-13T04:38:36Z",
           "updatedAt": "2022-09-13T04:38:36Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOD79ejs5DRyLJ",
+          "commit": {
+            "abbreviatedOid": "8c5d508"
+          },
+          "author": "chris-wood",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2022-10-03T17:03:45Z",
+          "updatedAt": "2022-10-03T17:03:45Z",
           "comments": []
         }
       ]
