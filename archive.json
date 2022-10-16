@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-09T02:21:41.747438+00:00",
+  "timestamp": "2022-10-16T02:35:55.661056+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -7892,6 +7892,30 @@
           "body": "As the approach of 'just shove it into the identities' does solve this particular need as far as I can tell I think its appropiate to close this issue for now.",
           "createdAt": "2022-10-06T17:31:04Z",
           "updatedAt": "2022-10-06T17:31:04Z"
+        }
+      ]
+    },
+    {
+      "number": 376,
+      "id": "I_kwDOD79ejs5UBHrJ",
+      "title": "recommend argon2i instead of scrypt in configurations",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/issues/376",
+      "state": "OPEN",
+      "author": "stef",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "i would like to reopen this issue: https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/155#discussion_r586922995 since the reason for this is now solved, as there is now a rfc for this: https://www.rfc-editor.org/rfc/rfc9106.txt\r\n",
+      "createdAt": "2022-10-14T16:20:01Z",
+      "updatedAt": "2022-10-14T16:22:18Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "quoting here the original answer from the above review comment, since github hides it:\r\n\r\n> This is not a great answer, but.... we can't properly cite Argon2i as it's not yet an RFC. (The same is true of the OPRF draft, but that's a dependency we can't workaround.)\r\n\r\n> We can certainly change this to argon2i, or whatever, provided there's a suitable reference and evidence that the new thing is more widely supported than scrypt. The purpose of this is to be a recommendation for applications should they not know what they're doing.\r\n",
+          "createdAt": "2022-10-14T16:22:18Z",
+          "updatedAt": "2022-10-14T16:22:18Z"
         }
       ]
     }
