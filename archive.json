@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-16T02:35:55.661056+00:00",
+  "timestamp": "2022-10-27T02:03:52.817322+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -28917,6 +28917,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 377,
+      "id": "PR_kwDOD79ejs5Bg4e5",
+      "title": "Fix inaccuracies in function definitions",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/377",
+      "state": "OPEN",
+      "author": "n-l-i",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2022-10-25T16:05:33Z",
+      "updatedAt": "2022-10-26T19:32:41Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
+      "baseRefName": "master",
+      "baseRefOid": "f6f458234d546b6f10fd43f5cb7b3ece75be33e1",
+      "headRepository": "n-l-i/draft-irtf-cfrg-opaque",
+      "headRefName": "master",
+      "headRefOid": "304f5fe13e86e7a315727ca5b356b987dabc351c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
