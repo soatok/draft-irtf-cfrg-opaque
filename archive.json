@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2022-10-27T02:03:52.817322+00:00",
+  "timestamp": "2022-11-03T01:58:57.437450+00:00",
   "repo": "cfrg/draft-irtf-cfrg-opaque",
   "labels": [
     {
@@ -7907,7 +7907,7 @@
       "labels": [],
       "body": "i would like to reopen this issue: https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/155#discussion_r586922995 since the reason for this is now solved, as there is now a rfc for this: https://www.rfc-editor.org/rfc/rfc9106.txt\r\n",
       "createdAt": "2022-10-14T16:20:01Z",
-      "updatedAt": "2022-10-14T16:22:18Z",
+      "updatedAt": "2022-11-02T21:42:15Z",
       "closedAt": null,
       "comments": [
         {
@@ -7916,6 +7916,62 @@
           "body": "quoting here the original answer from the above review comment, since github hides it:\r\n\r\n> This is not a great answer, but.... we can't properly cite Argon2i as it's not yet an RFC. (The same is true of the OPRF draft, but that's a dependency we can't workaround.)\r\n\r\n> We can certainly change this to argon2i, or whatever, provided there's a suitable reference and evidence that the new thing is more widely supported than scrypt. The purpose of this is to be a recommendation for applications should they not know what they're doing.\r\n",
           "createdAt": "2022-10-14T16:22:18Z",
           "updatedAt": "2022-10-14T16:22:18Z"
+        },
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "@stef Do you have a recommendation for the exact parameters for Argon2?\r\n\r\nRight now, the recommendation for scrypt reads as: `Scrypt(32768,8,1)`\r\n\r\nWhat would be the equivalent for Argon2 / Argon2i (and what about Argon2id)?\r\n\r\nEdit: Or perhaps we can just be ambiguous about this, and simply state `Argon2` without specifying any parameters such as recommended salt length, etc. (which are already stated in the Argon2 RFC anyway)",
+          "createdAt": "2022-11-02T02:21:14Z",
+          "updatedAt": "2022-11-02T02:23:19Z"
+        },
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> @stef Do you have a recommendation for the exact parameters for Argon2?\r\n> \r\n> Right now, the recommendation for scrypt reads as: `Scrypt(32768,8,1)`\r\n\r\nthis seems to me approximately as an `INTERACTIVE` setup. \r\n\r\n> What would be the equivalent for Argon2 / Argon2i (and what about Argon2id)?\r\n\r\nthe paper only gives an algo how to determine these: https://github.com/P-H-C/phc-winner-argon2/raw/master/argon2-specs.pdf\r\n\r\nlooking at libsodium these are the parameters for the interactive versions of argon2:\r\n\r\n```\r\ncrypto_pwhash_argon2id.h\r\n66:#define crypto_pwhash_argon2id_OPSLIMIT_INTERACTIVE 2U\r\n70:#define crypto_pwhash_argon2id_MEMLIMIT_INTERACTIVE 2**26\r\n\r\ncrypto_pwhash_argon2i.h\r\n66:#define crypto_pwhash_argon2i_OPSLIMIT_INTERACTIVE 4U\r\n70:#define crypto_pwhash_argon2i_MEMLIMIT_INTERACTIVE 2**25\r\n```\r\n\r\nwhile the argon2 rfc recommends two settings, one using 2GB ram (which i think is not workable for phones) and a second one using 64MB ram:\r\n\r\n> If much less memory is available, a uniformly safe option is\r\n>  Argon2id with t=3 iterations, p=4 lanes, m=2^(16) (64 MiB of\r\n>  RAM), 128-bit salt, and 256-bit tag size.  This is the SECOND\r\n>  RECOMMENDED option.\r\n\r\n> Edit: Or perhaps we can just be ambiguous about this, and simply state `Argon2` without specifying any parameters such as recommended salt length, etc. (which are already stated in the Argon2 RFC anyway)\r\n\r\ni think the default variant should be Argon2id which is a hybrid protecting against sidechannels and is also the mandatory variant as per the RFC.\r\n\r\nso i guess we can/should recommend also argon2id.\r\n\r\nregarding what parameters, i have asked @jedisct1 why libsodium uses different params than the rfc (i guess because the latest sodium release predates the rfc) - i think it makes sense to choose parameters that are already widely used as defaults, thus the libsodium params as an alternative.\r\n",
+          "createdAt": "2022-11-02T15:00:14Z",
+          "updatedAt": "2022-11-02T15:00:14Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "NONE",
+          "body": "Especially with interactive settings, using multiple lanes to compute a single hash can quickly turn into a DoS vector. Doubling memory usage instead provides a similar security level.\r\n\r\nThat being said, none of these recommended settings is really useful. It all depends on the resources the service is going to have, what latency is acceptable for an interactive session, how many concurrent sessions will run in parallel, and what else will be sharing the same resources.\r\n",
+          "createdAt": "2022-11-02T15:40:03Z",
+          "updatedAt": "2022-11-02T15:40:03Z"
+        },
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks for the comments and for providing the analysis! Perhaps we can avoid going into this discussion in the draft by just mentioning \"Argon2\" instead of \"Scrypt(...)\" as a recommendation without going into further details.\r\n\r\nSee https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/378 for the proposed change, and let me know if this looks OK, or if you think we should explicitly say \"Argon2id\" or something even more specific.",
+          "createdAt": "2022-11-02T18:16:25Z",
+          "updatedAt": "2022-11-02T18:16:25Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "NONE",
+          "body": "Looking good!\r\n\r\nFor interoperability purposes, explicitly saying \"Argon2id` may be a good idea, though.",
+          "createdAt": "2022-11-02T19:37:02Z",
+          "updatedAt": "2022-11-02T19:37:02Z"
+        },
+        {
+          "author": "stef",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "> That being said, none of these recommended settings is really useful. It all depends on the resources the service is going to have, what latency is acceptable for an interactive session, how many concurrent sessions will run in parallel, and what else will be sharing the same resources.\r\n\r\n@jedisct1 this KSF is only running on clients devices, not on servers.",
+          "createdAt": "2022-11-02T19:52:40Z",
+          "updatedAt": "2022-11-02T19:52:40Z"
+        },
+        {
+          "author": "jedisct1",
+          "authorAssociation": "NONE",
+          "body": "That was the justification for libsodium's parameters.\r\n\r\nBut on clients, doing recommendations is equally device-specific.",
+          "createdAt": "2022-11-02T19:54:40Z",
+          "updatedAt": "2022-11-02T19:54:40Z"
+        },
+        {
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Thanks. I changed the text to recommend `Argon2id` instead of `Argon2` in the PR.",
+          "createdAt": "2022-11-02T21:42:15Z",
+          "updatedAt": "2022-11-02T21:42:15Z"
         }
       ]
     }
@@ -28930,13 +28986,53 @@
       "labels": [],
       "body": "",
       "createdAt": "2022-10-25T16:05:33Z",
-      "updatedAt": "2022-10-26T19:32:41Z",
+      "updatedAt": "2022-11-02T02:25:31Z",
       "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
       "baseRefName": "master",
       "baseRefOid": "f6f458234d546b6f10fd43f5cb7b3ece75be33e1",
       "headRepository": "n-l-i/draft-irtf-cfrg-opaque",
       "headRefName": "master",
       "headRefOid": "304f5fe13e86e7a315727ca5b356b987dabc351c",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOD79ejs5FZgrp",
+          "commit": {
+            "abbreviatedOid": "304f5fe"
+          },
+          "author": "kevinlewi",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "This is great. Thank you very much for catching these and making the contribution!",
+          "createdAt": "2022-11-02T02:25:31Z",
+          "updatedAt": "2022-11-02T02:25:31Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 378,
+      "id": "PR_kwDOD79ejs5CBEV-",
+      "title": "Changing recommended config from scrypt to argon2id",
+      "url": "https://github.com/cfrg/draft-irtf-cfrg-opaque/pull/378",
+      "state": "OPEN",
+      "author": "kevinlewi",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes https://github.com/cfrg/draft-irtf-cfrg-opaque/issues/376",
+      "createdAt": "2022-11-02T02:27:34Z",
+      "updatedAt": "2022-11-02T21:41:51Z",
+      "baseRepository": "cfrg/draft-irtf-cfrg-opaque",
+      "baseRefName": "master",
+      "baseRefOid": "f6f458234d546b6f10fd43f5cb7b3ece75be33e1",
+      "headRepository": "kevinlewi/draft-irtf-cfrg-opaque",
+      "headRefName": "recommend_argon",
+      "headRefOid": "57e7f28345e7875e4c705bbc02c0afabc0faa0eb",
       "closedAt": null,
       "mergedAt": null,
       "mergedBy": null,
